@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Property Management System - Property Details</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+        
+        header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 1rem 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        
+        .user-menu {
+            display: flex;
+            align-items: center;
+        }
+        
+        .user-menu .user-name {
+            margin-right: 10px;
+        }
+        
+        .user-menu .notifications {
+            margin-right: 15px;
+            position: relative;
+        }
+        
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: #e74c3c;
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            font-size: 0.7rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        nav {
+            background-color: #34495e;
+            padding: 0.5rem 0;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-links li {
+            margin-right: 1rem;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+        
+        .nav-links a:hover, .nav-links a.active {
+            background-color: #2c3e50;
+        }
+        
+        main {
+            padding: 2rem 0;
+        }
+        
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+        
+        .page-title {
+            font-size: 1.8rem;
+            color: #2c3e50;
+        }
+        
+        .page-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .btn {
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            border: none;
+            font-weight: 500;
+        }
+        
+        .btn-primary {
+            background-color: #3498db;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: #2980b9;
+        }
+        
+        .btn-secondary {
+            background-color: #95a5a6;
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #7f8c8d;
+        }
+        
+        .btn-danger {
+            background-color: #e74c3c;
+            color: white;
+        }
+        
+        .btn-danger:hover {
+            background-color: #c0392b;
+        }
+        
+        .property-layout {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 1.5rem;
+        }
+        
+        .section {
+            background-color: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            margin-bottom: 1.5rem;
+        }
+        
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #ecf0f1;
+        }
+        
+        .section-title {
+            font-size: 1.2rem;
+            color: #2c3e50;
+        }
+        
+        .section-action {
+            color: #3498db;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+        
+        .property-image {
+            width: 100%;
+            height: 250px;
+            background-color: #ecf0f1;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #7f8c8d;
+        }
+        
+        .property-status {
+            display: inline-block;
+            padding: 0.3rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+        
+        .status-rented {
+            background-color: #e8f5e9;
+            color: #2ecc71;
+        }
+        
+        .status-vacant {
+            background-color: #ffebee;
+            color: #e74c3c;
+        }
+        
+        .status-maintenance {
+            background-color: #fff8e1;
+            color: #f39c12;
+        }
+        
+        .property-info-list {
+            list-style: none;
+        }
+        
+        .property-info-item {
+            display: flex;
+            margin-bottom: 0.8rem;
+        }
+        
+        .property-info-label {
+            width: 40%;
+            font-weight: bold;
+            color: #7f8c8d;
+        }
+        
+        .property-info-value {
+            width: 60%;
+            color: #2c3e50;
+        }
+        
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid #ecf0f1;
+            margin-bottom: 1.5rem;
+        }
+        
+        .tab {
+            padding: 0.8rem 1.5rem;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+        }
+        
+        .tab.active {
+            border-bottom-color: #3498db;
+            color: #3498db;
+            font-weight: bold;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .financial-summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .financial-card {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 1rem;
+            text-align: center;
+        }
+        
+        .financial-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin: 0.5rem 0;
+        }
+        
+        .financial-label {
+            font-size: 0.9rem;
+            color: #7f8c8d;
+        }
+        
+        .chart-container {
+            height: 250px;
+            margin-top: 1rem;
+            background-color: #ecf0f1;
+            border-radius: 4px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #7f8c8d;
+        }
+        
+        .tenant-list, .document-list, .maintenance-list {
+            list-style: none;
+        }
+        
+        .tenant-item, .document-item, .maintenance-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+            border-bottom: 1px solid #ecf0f1;
+        }
+        
+        .tenant-item:last-child, .document-item:last-child, .maintenance-item:last-child {
+            border-bottom: none;
+        }
+        
+        .tenant-details, .document-details, .maintenance-details {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .tenant-name, .document-name, .maintenance-title {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 0.2rem;
+        }
+        
+        .tenant-email, .document-date, .maintenance-date {
+            font-size: 0.9rem;
+            color: #7f8c8d;
+        }
+        
+        .tenant-actions, .document-actions, .maintenance-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .action-btn {
+            padding: 0.3rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            border: none;
+            transition: background-color 0.3s;
+        }
+        
+        .action-btn-view {
+            background-color: #3498db;
+            color: white;
+        }
+        
+        .action-btn-view:hover {
+            background-color: #2980b9;
+        }
+        
+        .action-btn-edit {
+            background-color: #f39c12;
+            color: white;
+        }
+        
+        .action-btn-edit:hover {
+            background-color: #d35400;
+        }
+        
+        .action-btn-delete {
+            background-color: #e74c3c;
+            color: white;
+        }
+        
+        .action-btn-delete:hover {
+            background-color: #c0392b;
+        }
+        
+        @media (max-width: 768px) {
+            .property-layout {
+                grid-template-columns: 1fr;
+            }
+            
+            .financial-summary {
+                grid-template-columns: 1fr 1fr;
+            }
+            
+            .property-info-label {
+                width: 50%;
+            }
+            
+            .property-info-value {
+                width: 50%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container header-content">
+            <div class="logo">PropertyManager</div>
+            <div class="user-menu">
+                <div class="notifications">
+                    <span>🔔</span>
+                    <span class="notification-badge">3</span>
+                </div>
+                <div class="user-name">John Smith</div>
+            </div>
+        </div>
+    </header>
+    
+    <nav>
+        <div class="container">
+            <ul class="nav-links">
+                <li><a href="#">Dashboard</a></li>
+                <li><a href="#" class="active">Properties</a></li>
+                <li><a href="#">Tenants</a></li>
+                <li><a href="#">Leases</a></li>
+                <li><a href="#">Finances</a></li>
+                <li><a href="#">Maintenance</a></li>
+                <li><a href="#">Reports</a></li>
+            </ul>
+        </div>
+    </nav>
+    
+    <main>
+        <div class="container">
+            <div class="page-header">
+                <h1 class="page-title">Property Details</h1>
+                <div class="page-actions">
+                    <button class="btn btn-secondary">Back to Properties</button>
+                    <button class="btn btn-primary">Edit Property</button>
+                </div>
+            </div>
+            
+            <div class="property-layout">
+                <div class="property-sidebar">
+                    <div class="section">
+                        <div class="property-image">[Property Image]</div>
+                        <span class="property-status status-rented">Rented</span>
+                        <h2>Oakwood Apartments #301</h2>
+                        <p>123 Main St, Anytown, CA 90210</p>
+                        
+                        <div class="section-header" style="margin-top: 1.5rem;">
+                            <h3 class="section-title">Property Information</h3>
+                        </div>
+                        
+                        <ul class="property-info-list">
+                            <li class="property-info-item">
+                                <div class="property-info-label">Property Type:</div>
+                                <div class="property-info-value">Apartment</div>
+                            </li>
+                            <li class="property-info-item">
+                                <div class="property-info-label">Bedrooms:</div>
+                                <div class="property-info-value">2</div>
+                            </li>
+                            <li class="property-info-item">
+                                <div class="property-info-label">Bathrooms:</div>
+                                <div class="property-info-value">1.5</div>
+                            </li>
+                            <li class="property-info-item">
+                                <div class="property-info-label">Square Feet:</div>
+                                <div class="property-info-value">1,200</div>
+                            </li>
+                            <li class="property-info-item">
+                                <div class="property-info-label">Year Built:</div>
+                                <div class="property-info-value">2005</div>
+                            </li>
+                            <li class="property-info-item">
+                                <div class="property-info-label">Purchase Date:</div>
+                                <div class="property-info-value">Jan 15, 2020</div>
+                            </li>
+                            <li class="property-info-item">
+                                <div class="property-info-label">Purchase Price:</div>
+                                <div class="property-info-value">$320,000</div>
+                            </li>
+                            <li class="property-info-item">
+                                <div class="property-info-label">Current Value:</div>
+                                <div class="property-info-value">$375,000</div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="property-main">
+                    <div class="section">
+                        <div class="tabs">
+                            <div class="tab active">Financial</div>
+                            <div class="tab">Tenants</div>
+                            <div class="tab">Documents</div>
+                            <div class="tab">Maintenance</div>
+                        </div>
+                        
+                        <div class="tab-content active" id="financial-tab">
+                            <div class="financial-summary">
+                                <div class="financial-card">
+                                    <div class="financial-value">$1,500</div>
+                                    <div class="financial-label">Monthly Rent</div>
+                                </div>
+                                <div class="financial-card">
+                                    <div class="financial-value">$950</div>
+                                    <div class="financial-label">Mortgage Payment</div>
+                                </div>
+                                <div class="financial-card">
+                                    <div class="financial-value">$250</div>
+                                    <div class="financial-label">Avg. Monthly Expenses</div>
+                                </div>
+                                <div class="financial-card">
+                                    <div class="financial-value">$300</div>
+                                    <div class="financial-label">Monthly Cash Flow</div>
+                                </div>
+                            </div>
+                            
+                            <div class="section-header">
+                                <h3 class="section-title">Income & Expenses</h3>
+                                <a href="#" class="section-action">View All Transactions</a>
+                            </div>
+                            
+                            <
+(Content truncated due to size limit. Use line ranges to read in chunks)

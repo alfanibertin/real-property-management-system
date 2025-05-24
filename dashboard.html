@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Property Management System - Dashboard</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+        
+        header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 1rem 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        
+        .user-menu {
+            display: flex;
+            align-items: center;
+        }
+        
+        .user-menu .user-name {
+            margin-right: 10px;
+        }
+        
+        .user-menu .notifications {
+            margin-right: 15px;
+            position: relative;
+        }
+        
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: #e74c3c;
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            font-size: 0.7rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        nav {
+            background-color: #34495e;
+            padding: 0.5rem 0;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-links li {
+            margin-right: 1rem;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+        
+        .nav-links a:hover, .nav-links a.active {
+            background-color: #2c3e50;
+        }
+        
+        main {
+            padding: 2rem 0;
+        }
+        
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+        
+        .dashboard-title {
+            font-size: 1.8rem;
+            color: #2c3e50;
+        }
+        
+        .dashboard-actions button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .dashboard-actions button:hover {
+            background-color: #2980b9;
+        }
+        
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background-color: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            text-align: center;
+        }
+        
+        .stat-card .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #2c3e50;
+            margin: 0.5rem 0;
+        }
+        
+        .stat-card .stat-label {
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+        
+        .stat-card.income {
+            border-top: 4px solid #2ecc71;
+        }
+        
+        .stat-card.expenses {
+            border-top: 4px solid #e74c3c;
+        }
+        
+        .stat-card.occupancy {
+            border-top: 4px solid #f39c12;
+        }
+        
+        .stat-card.maintenance {
+            border-top: 4px solid #9b59b6;
+        }
+        
+        .dashboard-sections {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 1.5rem;
+        }
+        
+        .section {
+            background-color: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            margin-bottom: 1.5rem;
+        }
+        
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #ecf0f1;
+        }
+        
+        .section-title {
+            font-size: 1.2rem;
+            color: #2c3e50;
+        }
+        
+        .section-action {
+            color: #3498db;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+        
+        .property-list {
+            list-style: none;
+        }
+        
+        .property-item {
+            display: flex;
+            align-items: center;
+            padding: 1rem 0;
+            border-bottom: 1px solid #ecf0f1;
+        }
+        
+        .property-item:last-child {
+            border-bottom: none;
+        }
+        
+        .property-image {
+            width: 60px;
+            height: 60px;
+            border-radius: 4px;
+            background-color: #ecf0f1;
+            margin-right: 1rem;
+        }
+        
+        .property-details {
+            flex-grow: 1;
+        }
+        
+        .property-name {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 0.2rem;
+        }
+        
+        .property-address {
+            font-size: 0.9rem;
+            color: #7f8c8d;
+        }
+        
+        .property-status {
+            padding: 0.3rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+        
+        .status-rented {
+            background-color: #e8f5e9;
+            color: #2ecc71;
+        }
+        
+        .status-vacant {
+            background-color: #ffebee;
+            color: #e74c3c;
+        }
+        
+        .status-maintenance {
+            background-color: #fff8e1;
+            color: #f39c12;
+        }
+        
+        .transaction-list {
+            list-style: none;
+        }
+        
+        .transaction-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.8rem 0;
+            border-bottom: 1px solid #ecf0f1;
+        }
+        
+        .transaction-item:last-child {
+            border-bottom: none;
+        }
+        
+        .transaction-details {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .transaction-title {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 0.2rem;
+        }
+        
+        .transaction-date {
+            font-size: 0.8rem;
+            color: #7f8c8d;
+        }
+        
+        .transaction-amount {
+            font-weight: bold;
+        }
+        
+        .amount-positive {
+            color: #2ecc71;
+        }
+        
+        .amount-negative {
+            color: #e74c3c;
+        }
+        
+        .maintenance-list {
+            list-style: none;
+        }
+        
+        .maintenance-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.8rem 0;
+            border-bottom: 1px solid #ecf0f1;
+        }
+        
+        .maintenance-item:last-child {
+            border-bottom: none;
+        }
+        
+        .maintenance-details {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .maintenance-title {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 0.2rem;
+        }
+        
+        .maintenance-property {
+            font-size: 0.8rem;
+            color: #7f8c8d;
+        }
+        
+        .maintenance-priority {
+            padding: 0.3rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+        
+        .priority-high {
+            background-color: #ffebee;
+            color: #e74c3c;
+        }
+        
+        .priority-medium {
+            background-color: #fff8e1;
+            color: #f39c12;
+        }
+        
+        .priority-low {
+            background-color: #e8f5e9;
+            color: #2ecc71;
+        }
+        
+        .chart-container {
+            height: 250px;
+            margin-top: 1rem;
+            background-color: #ecf0f1;
+            border-radius: 4px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #7f8c8d;
+        }
+        
+        @media (max-width: 768px) {
+            .dashboard-sections {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats-container {
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container header-content">
+            <div class="logo">PropertyManager</div>
+            <div class="user-menu">
+                <div class="notifications">
+                    <span>🔔</span>
+                    <span class="notification-badge">3</span>
+                </div>
+                <div class="user-name">John Smith</div>
+            </div>
+        </div>
+    </header>
+    
+    <nav>
+        <div class="container">
+            <ul class="nav-links">
+                <li><a href="#" class="active">Dashboard</a></li>
+                <li><a href="#">Properties</a></li>
+                <li><a href="#">Tenants</a></li>
+                <li><a href="#">Leases</a></li>
+                <li><a href="#">Finances</a></li>
+                <li><a href="#">Maintenance</a></li>
+                <li><a href="#">Reports</a></li>
+            </ul>
+        </div>
+    </nav>
+    
+    <main>
+        <div class="container">
+            <div class="dashboard-header">
+                <h1 class="dashboard-title">Dashboard</h1>
+                <div class="dashboard-actions">
+                    <button>Add Property</button>
+                </div>
+            </div>
+            
+            <div class="stats-container">
+                <div class="stat-card income">
+                    <div class="stat-value">$12,450</div>
+                    <div class="stat-label">Monthly Income</div>
+                </div>
+                <div class="stat-card expenses">
+                    <div class="stat-value">$3,280</div>
+                    <div class="stat-label">Monthly Expenses</div>
+                </div>
+                <div class="stat-card occupancy">
+                    <div class="stat-value">85%</div>
+                    <div class="stat-label">Occupancy Rate</div>
+                </div>
+                <div class="stat-card maintenance">
+                    <div class="stat-value">7</div>
+                    <div class="stat-label">Open Maintenance Requests</div>
+                </div>
+            </div>
+            
+            <div class="dashboard-sections">
+                <div class="main-content">
+                    <div class="section">
+                        <div class="section-header">
+                            <h2 class="section-title">Properties Overview</h2>
+                            <a href="#" class="section-action">View All</a>
+                        </div>
+                        <ul class="property-list">
+                            <li class="property-item">
+                                <div class="property-image"></div>
+                                <div class="property-details">
+                                    <div class="property-name">Oakwood Apartments #301</div>
+                                    <div class="property-address">123 Main St, Anytown, CA 90210</div>
+                                </div>
+                                <span class="property-status status-rented">Rented</span>
+                            </li>
+                            <li class="property-item">
+                                <div class="property-image"></div>
+                                <div class="property-details">
+                                    <div class="property-name">Sunset Villa</div>
+                                    <div class="property-address">456 Park Ave, Anytown, CA 90210</div>
+                                </div>
+                                <span class="property-status status-vacant">Vacant</span>
+                            </li>
+                            <li class="property-item">
+                                <div class="property-image"></div>
+                                <div class="property-details">
+                                    <div class="property-name">Riverside Condo #205</div>
+                                    <div class="property-address">789 River Rd, Anytown, CA 90210</div>
+                                </div>
+                                <span class="property-status status-maintenance">Maintenance</span>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div class="section">
+                        <div class="section-header">
+                            <h2 class="section-title">Financial Summary</h2>
+                            <a href="#" class="section-action">View Details</a>
+                        </div>
+                        <div class="chart-container">
+                            [Income vs Expenses Chart]
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="sidebar">
+                    <div class="section">
+                        <div class="section-header">
+                            <h2 class="section-title">Recent Transactions</h2>
+                            <a href="#" class="section-action">View All</a>
+                        </div>
+                        <ul class="transaction-list">
+                            <li class="transaction-item">
+                                <div class="transaction-details">
+                                    <div class="transaction-title">Rent Payment - Oakwood #301</div>
+                                    <div class="transaction-date">Apr 5, 2025</div>
+                                </div>
+                                <div class="transaction-amount amount-positive">+$1,500</div>
+                            </li>
+                            <li class="transaction-item">
+                                <div class="transaction-details">
+                                    <div class="transaction-title">Plumbing Repair - Riverside #205</div>
+                                    <div class="transaction-date">Apr 3, 2025</div>
+                                </div>
+                                <div class="transaction-amount amount-negative">-$350</div>
+                            </li>
+                            <li class="transaction-item">
+                                <div class="transaction-details">
+                                    <div class="transaction-title">Mortgage Payment - Sunset Villa</div>
+                                    <div class="transaction-date">Apr 1, 2025</div>
+                                </div>
+                                <div class="transaction-amount amount-negative">-$1,200</div>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div class="section">
+                        <div class="section-header
+(Content truncated due to size limit. Use line ranges to read in chunks)
